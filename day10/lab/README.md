@@ -138,7 +138,9 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-**Lần đầu** SentenceTransformers có thể tải model `all-MiniLM-L6-v2` (~90MB) — cần mạng.
+**Lần đầu** SentenceTransformers tải model embedding — cần mạng. Mặc định dùng model **đa ngữ**
+`paraphrase-multilingual-MiniLM-L12-v2` (~470MB, retrieval tiếng Việt tốt hơn). Mạng yếu có thể đổi
+sang `all-MiniLM-L6-v2` (~90MB) trong `.env`. Thiếu torch → tự fallback ONNX (xem `embedding.py`).
 
 ---
 

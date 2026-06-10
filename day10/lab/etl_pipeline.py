@@ -131,14 +131,12 @@ def cmd_run(args: argparse.Namespace) -> int:
 def cmd_embed_internal(cleaned_csv: Path, *, run_id: str, log) -> bool:
     try:
         import chromadb
-        from chromadb.utils import embedding_functions
     except ImportError:
         log("ERROR: chromadb chưa cài. pip install -r requirements.txt")
         return False
 
     db_path = os.environ.get("CHROMA_DB_PATH", str(ROOT / "chroma_db"))
     collection_name = os.environ.get("CHROMA_COLLECTION", "day10_kb")
-    model_name = os.environ.get("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
     from transform.cleaning_rules import load_raw_csv as load_csv  # same loader
 
@@ -147,8 +145,11 @@ def cmd_embed_internal(cleaned_csv: Path, *, run_id: str, log) -> bool:
         log("WARN: cleaned CSV rỗng — không embed.")
         return True
 
+    from embedding import get_embedding_function
+
     client = chromadb.PersistentClient(path=db_path)
-    emb = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=model_name)
+    emb, backend = get_embedding_function(log=log)
+    log(f"embed_backend={backend}")
     col = client.get_or_create_collection(name=collection_name, embedding_function=emb)
 
     ids = [r["chunk_id"] for r in rows]

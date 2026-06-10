@@ -5,7 +5,12 @@ __pycache__/
 *.pyc
 .DS_Store
 chroma_db/
+chroma_db_ml/
 .pytest_cache/
 *.log
 
-artifacts/*
+# Artifacts: commit BẰNG CHỨNG (eval + manifests) theo SCORING.md;
+# bỏ qua output tái tạo được / nặng (cleaned, quarantine, logs).
+artifacts/cleaned/*
+artifacts/quarantine/*
+!artifacts/**/.gitkeep
